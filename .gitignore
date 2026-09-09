@@ -1,0 +1,17 @@
+.env
+.env.local
+serviceAccountKey.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.venv_test/
+backend/demo.db
+backend/measured_wps.txt
+backend/assets/fallback_apology.wav
+
+# Node / Next.js
+dashboard/node_modules/
+dashboard/.next/
+dashboard/next-env.d.ts
