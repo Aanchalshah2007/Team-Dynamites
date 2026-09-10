@@ -16,18 +16,21 @@ LIVEKIT_API_SECRET = os.getenv("LIVEKIT_API_SECRET", "")
 DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY", "")
 
 # --- LLM (turn reasoning, SQL generation, answer formatting) ---
+# Groq's OpenAI-compatible chat completions API (LLM_API_KEY is a Groq key,
+# prefix "gsk_"). See llm_client.py.
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
-LLM_MODEL = os.getenv("LLM_MODEL", "claude-sonnet-5")
+LLM_MODEL = os.getenv("LLM_MODEL", "openai/gpt-oss-20b")
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
 
 # --- Rime TTS: exact combination used in the recorded demo (architecture §3) ---
-# TODO before submission: pull live values from Rime's catalog, test end-to-end,
-# and make sure these match RIME_EVIDENCE.md and README exactly.
+# Confirmed working end-to-end 2026-09-10 with a live synthesis call.
 RIME_API_KEY = os.getenv("RIME_API_KEY", "")
 RIME_MODEL_ID = os.getenv("RIME_MODEL_ID", "mistv2")
-RIME_SPEAKER = os.getenv("RIME_SPEAKER", "")
+RIME_SPEAKER = os.getenv("RIME_SPEAKER", "abbie")
 RIME_LANGUAGE = os.getenv("RIME_LANGUAGE", "eng")
-RIME_ENDPOINT = os.getenv("RIME_ENDPOINT", "")
-RIME_AUDIO_FORMAT = os.getenv("RIME_AUDIO_FORMAT", "pcm_16000")
+RIME_ENDPOINT = os.getenv("RIME_ENDPOINT", "https://users.rime.ai/v1/rime-tts")
+RIME_AUDIO_FORMAT = os.getenv("RIME_AUDIO_FORMAT", "pcm")  # LiveKit plugin TTSEncoding: "pcm" | "mp3"
+RIME_SAMPLE_RATE = int(os.getenv("RIME_SAMPLE_RATE", "16000"))
 
 # --- Firebase Firestore (telemetry: fenced_drop events, active_speech_provider) ---
 FIREBASE_PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID", "")

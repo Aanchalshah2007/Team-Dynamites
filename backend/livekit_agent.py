@@ -123,6 +123,7 @@ async def entrypoint(ctx: agents.JobContext) -> None:
             model=config.RIME_MODEL_ID,
             speaker=config.RIME_SPEAKER,
             audio_format=config.RIME_AUDIO_FORMAT,
+            sample_rate=config.RIME_SAMPLE_RATE,
         ),
     )
 
