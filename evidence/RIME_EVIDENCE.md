@@ -48,11 +48,28 @@ no live LiveKit/Rime/Deepgram in the loop):
 | avg time-to-stop-audio | ~151 ms (fixed by the scripted `BARGE_IN_AFTER_S` timing, not a real-world latency measurement) |
 | correct-final-answer rate | 100% |
 
-**Live end-to-end run (real mic, real Rime/Deepgram):** not yet recorded --
-TODO before submission. Re-run `stress_test.py --n 10` after wiring real
-credentials, then replace this table with the live numbers pulled from the
-Firestore `telemetry` collection (`fenced_drop` count, `stress_test_run`
-timing, dashboard-observed `active_speech_provider`).
+**Rime component verified live (2026-09-10):** a direct synthesis call to
+`https://users.rime.ai/v1/rime-tts` (model `mistv2`, speaker `abbie`, lang
+`eng`, 16kHz PCM) returned real audio, and `evidence/measure_wps.py` measured
+**2.9491 words/sec** against it (written to `backend/measured_wps.txt`,
+replacing the earlier 2.5 default).
+
+**SQL-RAG component verified live (2026-09-10):** with a real Groq
+(`openai/gpt-oss-20b`) key, `sql_rag_chain.answer("What is the operating
+voltage of the DHT22?")` generated `SELECT operating_voltage FROM sensors
+WHERE name='DHT22';`, ran it against the real seeded DB, and produced "The
+DHT22 operates at 3.3 to 6 volts." -- correct, grounded, no hallucinated spec.
+
+**Still not recorded: a live run through the actual LiveKit voice pipeline**
+(real mic -> Deepgram -> orchestrator -> Rime, all wired together in one
+session). Every component (Rime TTS + word-rate calibration, SQL-RAG +
+LLM, and the fencing/truncation orchestrator logic) is now independently
+verified live; the remaining gap is joining them in one LiveKit room with a
+speaking participant, which needs `python backend/livekit_agent.py dev` plus
+a client actually in the room -- that's the recorded demo itself. Re-run
+`stress_test.py --n 10` after that session to pull real Firestore numbers
+(`fenced_drop` count, `stress_test_run` timing, dashboard-observed
+`active_speech_provider`) into this section.
 
 ## Limitations
 

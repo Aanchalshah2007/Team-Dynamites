@@ -4,10 +4,9 @@ audio-truncation math. Never hardcode an assumed value in config.py instead.
 
 Run: python evidence/measure_wps.py
 
-NOTE: verify this against Rime's current REST contract before relying on it --
-the request/response shape here is a best-effort default, and architecture §3
-requires the model/speaker/language/endpoint to be pulled from Rime's live
-catalog and tested end-to-end at submission time, not assumed.
+Endpoint/body verified live against https://users.rime.ai/v1/rime-tts on
+2026-09-10 -- POST {speaker, text, modelId, lang, samplingRate}, response is
+raw PCM16 (no WAV container) even when Accept: audio/wav is requested.
 """
 
 import sys
@@ -26,13 +25,12 @@ CALIBRATION_TEXT = (
 
 
 def _pcm16_duration_seconds(pcm_bytes: bytes, sample_rate: int) -> float:
+    # Rime's response has no RIFF header, but strip one defensively in case
+    # a future account/model combination adds one.
+    if pcm_bytes[:4] == b"RIFF":
+        pcm_bytes = pcm_bytes[44:]
     num_samples = len(pcm_bytes) // 2  # 16-bit samples
     return num_samples / sample_rate
-
-
-def _sample_rate_from_format(audio_format: str, default: int = 16000) -> int:
-    tail = audio_format.rsplit("_", 1)[-1]
-    return int(tail) if tail.isdigit() else default
 
 
 def measure() -> float:
@@ -46,22 +44,21 @@ def measure() -> float:
         config.RIME_ENDPOINT,
         headers={
             "Authorization": f"Bearer {config.RIME_API_KEY}",
-            "Accept": "audio/*",
             "Content-Type": "application/json",
+            "Accept": "audio/wav",
         },
         json={
             "text": CALIBRATION_TEXT,
             "modelId": config.RIME_MODEL_ID,
             "speaker": config.RIME_SPEAKER,
             "lang": config.RIME_LANGUAGE,
-            "audioFormat": config.RIME_AUDIO_FORMAT,
+            "samplingRate": config.RIME_SAMPLE_RATE,
         },
         timeout=30,
     )
     response.raise_for_status()
 
-    sample_rate = _sample_rate_from_format(config.RIME_AUDIO_FORMAT)
-    duration_s = _pcm16_duration_seconds(response.content, sample_rate)
+    duration_s = _pcm16_duration_seconds(response.content, config.RIME_SAMPLE_RATE)
     if duration_s <= 0:
         raise SystemExit("Calibration call returned no audio -- check RIME_* config.")
 

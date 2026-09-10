@@ -97,22 +97,24 @@ own file there.
 | LiveKit Agents | WebRTC transport, VAD, turn handling, barge-in detection |
 | Deepgram | Speech-to-text |
 | Rime | Text-to-speech (via LiveKit's official Rime plugin) |
-| An LLM API (Anthropic by default, via `LLM_API_KEY`/`LLM_MODEL`) | Turn reasoning, SQL generation, answer formatting |
+| An LLM API (Groq's OpenAI-compatible API by default, via `LLM_API_KEY`/`LLM_MODEL`/`LLM_BASE_URL`) | Turn reasoning, SQL generation, answer formatting |
 | SQLite | Demo hardware-spec database (`sensors`, `actuators`) |
 | Firebase Firestore | Telemetry: `fenced_drop` events, `active_speech_provider`, turn/stress-test events |
 | Next.js (`dashboard/`) | Live telemetry view backed by Firestore |
 
 **Exact Rime configuration used in the recorded demo** (architecture §3 --
-must match `.env` and pass organizer preflight; fill in after pulling live
-values from Rime's catalog and testing end-to-end):
+must match `.env` and pass organizer preflight). Confirmed working end-to-end
+2026-09-10 with a live synthesis call against `RIME_ENDPOINT` and a live
+`evidence/measure_wps.py` calibration run (measured 2.9491 words/sec, written
+to `backend/measured_wps.txt`):
 
 | Field | Value |
 |---|---|
-| Model ID | *TODO -- see `RIME_MODEL_ID` in `.env`* |
-| Speaker | *TODO -- see `RIME_SPEAKER` in `.env`* |
-| Language | *TODO -- see `RIME_LANGUAGE` in `.env`* |
-| Endpoint / region | *TODO -- see `RIME_ENDPOINT` in `.env`* |
-| Audio format | *TODO -- see `RIME_AUDIO_FORMAT` in `.env`* |
+| Model ID | `mistv2` |
+| Speaker | `abbie` |
+| Language | `eng` |
+| Endpoint / region | `https://users.rime.ai/v1/rime-tts` |
+| Audio format | `pcm`, 16000 Hz (`RIME_AUDIO_FORMAT` / `RIME_SAMPLE_RATE`) |
 | Transport | LiveKit Agents (WebRTC) via the official Rime LiveKit plugin |
 
 ## 4. Known limitations
