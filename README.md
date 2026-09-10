@@ -110,19 +110,11 @@ to `backend/measured_wps.txt`):
 
 | Field | Value |
 |---|---|
-<<<<<<< HEAD
 | Model ID | `mistv2` |
 | Speaker | `abbie` |
 | Language | `eng` |
 | Endpoint / region | `https://users.rime.ai/v1/rime-tts` |
 | Audio format | `pcm`, 16000 Hz (`RIME_AUDIO_FORMAT` / `RIME_SAMPLE_RATE`) |
-=======
-| Model ID | mistv2 |
-| Speaker | *TODO -- see `RIME_SPEAKER` in `.env`* |
-| Language | eng |
-| Endpoint / region | *TODO -- see `RIME_ENDPOINT` in `.env`* |
-| Audio format | pcm_16000 |
->>>>>>> 66c64a6617f8a12e11239ae9d41facb56150ece1
 | Transport | LiveKit Agents (WebRTC) via the official Rime LiveKit plugin |
 
 ## 4. Known limitations
