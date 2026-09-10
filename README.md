@@ -108,11 +108,11 @@ values from Rime's catalog and testing end-to-end):
 
 | Field | Value |
 |---|---|
-| Model ID | *TODO -- see `RIME_MODEL_ID` in `.env`* |
+| Model ID | mistv2 |
 | Speaker | *TODO -- see `RIME_SPEAKER` in `.env`* |
-| Language | *TODO -- see `RIME_LANGUAGE` in `.env`* |
+| Language | eng |
 | Endpoint / region | *TODO -- see `RIME_ENDPOINT` in `.env`* |
-| Audio format | *TODO -- see `RIME_AUDIO_FORMAT` in `.env`* |
+| Audio format | pcm_16000 |
 | Transport | LiveKit Agents (WebRTC) via the official Rime LiveKit plugin |
 
 ## 4. Known limitations
